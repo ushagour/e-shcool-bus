@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
-import {  Screen } from "../components";
+import { Screen, StudentInfoModal } from "../components";
 import { DefaultMarker, StudentMarker } from "../components/Map";
 import MapView from "react-native-maps";
 import { getData } from "../firebase";
@@ -18,19 +18,26 @@ const defaultLocation = {
 export default function MapScreen() {
   // states :
   const [students, setStudents] = useState([]);
+  const [showModal, setShowModal] = useState(true);
 
   // get user function:
   const getStudent = () => {
     getData("users").then(data => setStudents(data));
   };
+  const closeModalHandler = () => setShowModal(false);
 
   useEffect(() => {
+    console.log("call use effect");
     getStudent();
   }, []);
 
   return (
     <Screen style={styles.container}>
       {/* <Button style={styles.startButton} title='start' variant='primary' /> */}
+
+      {/* Student Info Modal  */}
+      <StudentInfoModal show={showModal} onClose={closeModalHandler} />
+
       <MapView style={styles.map} region={defaultLocation}>
         {/* Default Location Marker (EST location) */}
         <DefaultMarker defaultLocation={defaultLocation} />

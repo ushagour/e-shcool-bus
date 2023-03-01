@@ -4,6 +4,7 @@ import { Screen, StudentInfoModal } from "../components";
 import { DefaultMarker, StudentMarker } from "../components/Map";
 import MapView from "react-native-maps";
 import { getData } from "../firebase";
+import MapViewDirections from "react-native-maps-directions";
 
 /// Default location or School location (EST - location)
 const defaultLocation = {
@@ -18,34 +19,63 @@ const defaultLocation = {
 export default function MapScreen() {
   // states :
   const [students, setStudents] = useState([]);
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [studentDetails, setStudentDetails] = useState(null);
 
   // get user function:
   const getStudent = () => {
     getData("users").then(data => setStudents(data));
   };
   const closeModalHandler = () => setShowModal(false);
+  const openModalHandler = () => setShowModal(true);
+
+  const origin = {
+    latitude: defaultLocation.latitude,
+    longitude: defaultLocation.longitude,
+  };
+  const destination = { latitude: 34.047239, longitude: -6.797738 };
+  const GOOGLE_MAPS_APIKEY = "AIzaSyBk7oowMsFGDVYrHhBE_Q7APXUIhxCHgR4";
 
   useEffect(() => {
-    console.log("call use effect");
     getStudent();
   }, []);
 
   return (
     <Screen style={styles.container}>
-      {/* <Button style={styles.startButton} title='start' variant='primary' /> */}
+      {/* Begin Student Info Modal  */}
+      <StudentInfoModal
+        show={showModal}
+        onClose={closeModalHandler}
+        student={studentDetails}
+      />
+      {/* End Student Info Modal  */}
 
-      {/* Student Info Modal  */}
-      <StudentInfoModal show={showModal} onClose={closeModalHandler} />
-
-      <MapView style={styles.map} region={defaultLocation}>
+      <MapView
+        style={styles.map}
+        region={defaultLocation}
+        initialRegion={defaultLocation}
+        fitToElements={true}>
         {/* Default Location Marker (EST location) */}
         <DefaultMarker defaultLocation={defaultLocation} />
-        {/* Other Student Location Markers */}
+        {/* Begin Other Students Markers */}
         {students.length !== 0 &&
           students.map(student => (
-            <StudentMarker student={student} key={student.id} />
+            <StudentMarker
+              student={student}
+              key={student.id}
+              onPress={() => {
+                setStudentDetails(student);
+                openModalHandler();
+              }}
+            />
           ))}
+        {/* End Other Students Markers */}
+
+        <MapViewDirections
+          origin={origin}
+          destination={destination}
+          apikey={GOOGLE_MAPS_APIKEY}
+        />
       </MapView>
     </Screen>
   );

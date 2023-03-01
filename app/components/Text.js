@@ -1,12 +1,14 @@
-import { StyleSheet, Text as RNText, View } from "react-native";
 import React from "react";
+import { Text as RNText } from "react-native";
+import styles from "../config/styles";
+import colors from "../config/colors";
 
-const Text = ({ children, style }) => {
-  return <RNText style={[styles.text, style]}>{children}</RNText>;
+const Text = ({ as, children, style, color }) => {
+  return (
+    <RNText style={[{ ...styles.text[as], color: colors[color] }, style]}>
+      {children}
+    </RNText>
+  );
 };
 
 export default Text;
-
-const styles = StyleSheet.create({
-  text: {},
-});

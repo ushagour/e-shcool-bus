@@ -1,20 +1,80 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View ,ScrollView} from "react-native";
 import React from "react";
 import { Modal } from "react-native";
+import Button from "./Button";
+import Center from "./Center";
+import Avatar from "./Avatar";
+import Text from "./Text";
+import Card from "./Card";
 
-export default function StudentInfoModal({ show, onClose }) {
+export default function StudentInfoModal({ show, onClose, student }) {
   return (
     <Modal
       animationType='slide'
       visible={show}
+      style={styles.modal}
       onRequestClose={() => {
         onClose();
       }}>
-      <View>
-        <Text>StudentInfoModal</Text>
-      </View>
+      {student && (
+        <ScrollView style={styles.modalContent}>
+          <Center>
+            <Avatar size='lg' uri={student.imageUrl} />
+          </Center>
+          <Center>
+            <Text as='header4' style={styles.text}>
+              {student.name}
+            </Text>
+          </Center>
+          <Card>
+            <Text color='secondary' as='header6'>
+              Name
+            </Text>
+            <Text as='paragraph' style={styles.text}>
+              {student.name}
+            </Text>
+          </Card>
+          <Card>
+            <Text color='secondary' as='header6'>
+              Address
+            </Text>
+            <Text as='paragraph' style={styles.text}>
+              {student.address.name}
+            </Text>
+          </Card>
+          <Card>
+            <Text color='secondary' as='header6'>
+              Filiere
+            </Text>
+            <Text as='paragraph' style={styles.text}>
+              {student.filiere}
+            </Text>
+          </Card>
+          <Card>
+            <Text color='secondary' as='header6'>
+              Phone
+            </Text>
+            <Text as='paragraph' style={styles.text}>
+              {student.phone}
+            </Text>
+          </Card>
+          <Button title='close' onPress={onClose} />
+        </ScrollView>
+      )}
     </Modal>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  modal: {
+    marginTop: 20,
+  },
+  modalContent: {
+    height: "100%",
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  text: {
+    marginVertical: 7,
+  },
+});

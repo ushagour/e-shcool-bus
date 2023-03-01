@@ -1,39 +1,35 @@
-import { Image, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import { Marker } from "react-native-maps";
 import colors from "../../config/colors";
+import Avatar from "../Avatar";
 
-export default function StudentMarker({ student }) {
+export default function StudentMarker({ student, onPress }) {
   return (
     <Marker
       coordinate={{
         latitude: student.address.location.latitude,
         longitude: student.address.location.longitude,
       }}
-      onPress={() => {
-        setShowModal(true);
-      }}>
-      <Image source={{ uri: student.imageUrl }} style={styles.locationImage} />
+      onPress={onPress}>
+      <View style={styles.markerImageContainer}>
+        <Avatar uri={student.imageUrl} size='sm' />
+      </View>
     </Marker>
   );
 }
 
 const styles = StyleSheet.create({
-  locationImage: {
-    height: 30,
-    width: 30,
-    borderRadius: 15,
-    backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: colors.secondary,
-
+  markerImageContainer: {
+    //ios
     shadowColor: colors.primary,
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
     shadowOffset: {
-      width: 100,
-      height: 100,
+      height: 0,
+      width: 0,
     },
-    shadowOpacity: 0.6,
-    shadowRadius: 40.0,
-    // elevation: 24,
+    //android
+    elevation: 4,
   },
 });

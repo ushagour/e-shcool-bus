@@ -1,8 +1,8 @@
-import { StyleSheet, Image, View } from "react-native";
+import { StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Button, Screen } from "../components";
-import { StudentMarker } from "../components/Map";
-import MapView, { Marker } from "react-native-maps";
+import {  Screen } from "../components";
+import { DefaultMarker, StudentMarker } from "../components/Map";
+import MapView from "react-native-maps";
 import { getData } from "../firebase";
 
 /// Default location or School location (EST - location)
@@ -11,8 +11,8 @@ const defaultLocation = {
   latitude: 34.05011,
   longitude: -6.812845,
   // camera zoom :
-  latitudeDelta: 0.001 * 10,
-  longitudeDelta: 0.001 * 10,
+  latitudeDelta: 0.001 * 13,
+  longitudeDelta: 0.001 * 13,
 };
 
 export default function MapScreen() {
@@ -33,14 +33,8 @@ export default function MapScreen() {
       {/* <Button style={styles.startButton} title='start' variant='primary' /> */}
       <MapView style={styles.map} region={defaultLocation}>
         {/* Default Location Marker (EST location) */}
-        <Marker coordinate={defaultLocation}>
-          <Image
-            source={require("../assets/defaultPosition.png")}
-            style={styles.defaultLocation}
-          />
-        </Marker>
-        {/* Auther Student Location Markers */}
-
+        <DefaultMarker defaultLocation={defaultLocation} />
+        {/* Other Student Location Markers */}
         {students.length !== 0 &&
           students.map(student => (
             <StudentMarker student={student} key={student.id} />
@@ -78,9 +72,5 @@ const styles = StyleSheet.create({
   map: {
     width: "100%",
     height: "100%",
-  },
-  defaultLocation: {
-    height: 60,
-    width: 60,
   },
 });
